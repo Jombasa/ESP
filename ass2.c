@@ -6,7 +6,7 @@
 #define MAX 255
 
 
-int readInput(char *input);
+int readInput(char input[]);
 int checkInput(char input_array[], int counter);
 
 int main (void)
@@ -18,7 +18,7 @@ int main (void)
         // printf("%d \n", EOF);
         //   check loop if has a value or it is EOF
         check_loop = readInput(&input);
-        printf("%c", input[254]);
+        // printf("%c", input[1]);
         if(check_loop == -1)
         {
             return -1;
@@ -38,13 +38,13 @@ int readInput(char *input)
     int counter = 0;
     int checked_value;
     char ch;
-    char read_array[MAX];
+    // char read_array[MAX];
 
     printf("plain text: ");
     while(TRUE)
     {
         ch = getchar();
-        read_array[counter] = ch;
+        input[counter] = ch;
         if(ch == EOF)
         {
             return RETURNEOF;
@@ -58,15 +58,14 @@ int readInput(char *input)
         // if there are only low letters
         if(ch == '\n' && counter > 0)
         {
-            checked_value = checkInput(read_array, counter);
+            // if more than 255 chars
+            if(counter > 255)
+            {
+                return -1;
+            }
+            checked_value = checkInput(input, counter);
             return checked_value;
             // printf("%c",read_array[0]);
-        }
-
-        // if more than 255 chars
-        if(counter > 256)
-        {
-            return -1;
         }
 
         counter++;
@@ -85,7 +84,7 @@ int checkInput(char read_array[], int counter)
         {
             return -2;
         }
-        printf("%c", read_array[loop_counter]);
+        // printf("%c", read_array[loop_counter]);
     }
     return 0;
 }
