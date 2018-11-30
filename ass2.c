@@ -46,25 +46,36 @@ int stringLenght(char *string)
   return it;
 }
 
+const char * reverseString(char *input_string)
+{
+  //TODO reverse string
+  return input_string
+}
+
 const char * encryption(char *input_string)
 {
   char ch;
   int string_length = stringLenght(input_string);
-  //TODO return reverse string if key is 0
-  int enryption_key = 256 % string_length;
-  ////encrypitng chars
-  for(int it = 0; input_string[it] != '\0'; ++it)
-  {
-    ch = input_string[it] + enryption_key;
-    //ch > 'z'
-    if(ch > 122)
-    {
-      //ch = ch - z + a -1
-      ch = ch - 122 + 97 -1;
-    }
-    input_string[it] = ch;
+  int encryption_key = 256 % string_length;
+  //
+  if(encryption_key == 0){
+    return reverseString();
   }
-  return input_string;
+  else
+  {
+    for(int it = 0; input_string[it] != '\0'; ++it)
+    {
+      ch = input_string[it] + encryption_key;
+      //ch > 'z'
+      if(ch > 122)
+      {
+        //ch = ch - z + a -1
+        ch = ch - 122 + 97 -1;
+      }
+      input_string[it] = ch;
+    }
+    return input_string;
+  }
 }
 
 int main (void)
@@ -99,27 +110,28 @@ int readInput(char *input)
     input[counter] = ch;
     if(ch == EOF)
     {
-        return RETURNEOF;
+        return RETURNEOF; // break
     }
 
     if(ch == '\n' && counter == 0)
     {
-        return RETURNEOF;
+        return RETURNEOF; // break
     }
     //TODO you can stop reading with EOF too...
     // if there are only low letters
-    if(ch == '\n' && counter > 0)
-    {
-        // if more than 255 chars
-        if(counter > 255)
-        {
-            return -1;
-        }
-        checked_value = checkInput(input, counter);
-        return checked_value;
-    }
-    counter++;
+    // if(ch == '\n' && counter > 0)
+    // {
+    //     // if more than 255 chars
+    //     if(counter > 255)
+    //     {
+    //         return -1;
+    //     }
+    //     checked_value = checkInput(input, counter);
+    //     return checked_value;
+    // }
+    // counter++;
   }
+  //check input
   return -1;
 }
 
