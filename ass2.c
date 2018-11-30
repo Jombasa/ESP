@@ -1,13 +1,12 @@
 #include <stdio.h>
 
 #define TRUE 1
-#define RETURNEOF 2
-// #define FALSE 0
-#define MAX 255
+#define MAX 256
+#define RETURN_OK 0
+#define RETURN_FALSE_NUMBER -1
+#define RETURN_FALSE_CHAR -2
 
-
-int readInput(char input[]);
-int checkInput(char input_array[], int counter);
+int checkInput(char read_array[], int counter);
 
 //Return values of the program
 typedef enum _ReturnValue_
@@ -46,12 +45,17 @@ int stringLenght(char *string)
   return it;
 }
 
+<<<<<<< HEAD
 const char * reverseString(char *input_string)
 {
   //TODO reverse string
   return input_string
 }
 
+=======
+
+// TODO space should stay as space
+>>>>>>> 33d462ba4283736cc1ca8d72debc376fcbc50121
 const char * encryption(char *input_string)
 {
   char ch;
@@ -78,23 +82,6 @@ const char * encryption(char *input_string)
   }
 }
 
-int main (void)
-{
-  char input[MAX];
-
-  ReturnValue return_value = readInput(&input);
-
-  if(return_value != EVERYTHING_OK){
-    printError(return_value);
-  }
-  else
-  {
-    const char* encrypted_string = encryption(input);
-    printEnryptedMessage(encrypted_string);
-    return 0;
-  }
-}
-
 
 int readInput(char *input)
 {
@@ -107,14 +94,19 @@ int readInput(char *input)
   while(TRUE)
   {
     ch = getchar();
-    input[counter] = ch;
     if(ch == EOF)
     {
+<<<<<<< HEAD
         return RETURNEOF; // break
+=======
+      // print space
+      printf("\n");
+      break;
+>>>>>>> 33d462ba4283736cc1ca8d72debc376fcbc50121
     }
-
-    if(ch == '\n' && counter == 0)
+    else
     {
+<<<<<<< HEAD
         return RETURNEOF; // break
     }
     //TODO you can stop reading with EOF too...
@@ -133,20 +125,61 @@ int readInput(char *input)
   }
   //check input
   return -1;
+=======
+      input[counter] = ch;
+    }
+    // end
+    if(ch == '\n')
+    {
+      break;
+    }
+    counter++;
+  }
+  checked_value = checkInput(input, counter);
+  return checked_value;
+>>>>>>> 33d462ba4283736cc1ca8d72debc376fcbc50121
 }
 
 // check if there are all low letters
 int checkInput(char read_array[], int counter)
 {
   int loop_counter;
+  // if counter bigger than 255
+  if(counter > 255)
+  {
+    return RETURN_FALSE_NUMBER;
+  }
+
   for(loop_counter = 0; loop_counter < counter; loop_counter++)
   {
-      //TODO space returns invalid_char
+      // printf("%c\n", read_array[loop_counter]);
       // check for letters
       if(read_array[loop_counter] < 97 || read_array[loop_counter] > 122)
       {
-          return -2;
+          if(read_array[loop_counter] != 32)
+          {
+            return RETURN_FALSE_CHAR;
+          }
       }
   }
-  return 0;
+  return RETURN_OK;
 }
+
+
+int main (void)
+{
+  char input[MAX];
+
+  ReturnValue return_value = readInput(&input);
+
+  if(return_value != EVERYTHING_OK){
+    printError(return_value);
+  }
+  else
+  {
+    const char* encrypted_string = encryption(input);
+    printEnryptedMessage(encrypted_string);
+    return 0;
+  }
+}
+
