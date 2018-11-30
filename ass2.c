@@ -1,13 +1,12 @@
 #include <stdio.h>
 
 #define TRUE 1
-#define RETURNEOF 2
-// #define FALSE 0
-#define MAX 255
+#define MAX 256
+#define RETURN_OK 0
+#define RETURN_FALSE_NUMBER -1
+#define RETURN_FALSE_CHAR -2
 
-
-int readInput(char input[]);
-int checkInput(char input_array[], int counter);
+int checkInput(char read_array[], int counter);
 
 //Return values of the program
 typedef enum _ReturnValue_
@@ -46,6 +45,8 @@ int stringLenght(char *string)
   return it;
 }
 
+
+// TODO space should stay as space
 const char * encryption(char *input_string)
 {
   char ch;
@@ -67,6 +68,65 @@ const char * encryption(char *input_string)
   return input_string;
 }
 
+
+int readInput(char *input)
+{
+  // int retrieve;
+  int counter = 0;
+  int checked_value;
+  char ch;
+
+  printf("plain text: ");
+  while(TRUE)
+  {
+    ch = getchar();
+    if(ch == EOF)
+    {
+      // print space
+      printf("\n");
+      break;
+    }
+    else
+    {
+      input[counter] = ch;
+    }
+    // end
+    if(ch == '\n')
+    {
+      break;
+    }
+    counter++;
+  }
+  checked_value = checkInput(input, counter);
+  return checked_value;
+}
+
+// check if there are all low letters
+int checkInput(char read_array[], int counter)
+{
+  int loop_counter;
+  // if counter bigger than 255
+  if(counter > 255)
+  {
+    return RETURN_FALSE_NUMBER;
+  }
+
+  for(loop_counter = 0; loop_counter < counter; loop_counter++)
+  {
+      // printf("%c\n", read_array[loop_counter]);
+      // check for letters
+      if(read_array[loop_counter] < 97 || read_array[loop_counter] > 122)
+      {
+          if(read_array[loop_counter] != 32)
+          {
+            return RETURN_FALSE_CHAR;
+          }
+      }
+  }
+  return RETURN_OK;
+}
+
+
 int main (void)
 {
   char input[MAX];
@@ -84,57 +144,3 @@ int main (void)
   }
 }
 
-
-int readInput(char *input)
-{
-  // int retrieve;
-  int counter = 0;
-  int checked_value;
-  char ch;
-
-  printf("plain text: ");
-  while(TRUE)
-  {
-    ch = getchar();
-    input[counter] = ch;
-    if(ch == EOF)
-    {
-        return RETURNEOF;
-    }
-
-    if(ch == '\n' && counter == 0)
-    {
-        return RETURNEOF;
-    }
-    //TODO you can stop reading with EOF too...
-    // if there are only low letters
-    if(ch == '\n' && counter > 0)
-    {
-        // if more than 255 chars
-        if(counter > 255)
-        {
-            return -1;
-        }
-        checked_value = checkInput(input, counter);
-        return checked_value;
-    }
-    counter++;
-  }
-  return -1;
-}
-
-// check if there are all low letters
-int checkInput(char read_array[], int counter)
-{
-  int loop_counter;
-  for(loop_counter = 0; loop_counter < counter; loop_counter++)
-  {
-      //TODO space returns invalid_char
-      // check for letters
-      if(read_array[loop_counter] < 97 || read_array[loop_counter] > 122)
-      {
-          return -2;
-      }
-  }
-  return 0;
-}
