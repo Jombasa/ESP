@@ -29,16 +29,6 @@ ReturnValue printError(ReturnValue return_value)
   }
   return return_value;
 }
-
-void printEnryptedMessage(const char * encrypted_string)
-{
-  // for(int it = 0; it < '\0'; ++it)
-  // {
-  //   printf("%c",encrypted_string[it]);
-  // }
-  printf("encrypted text: %s", encrypted_string);
-}
-
 int stringLenght(char *string)
 {
   int it = 0;
@@ -48,6 +38,12 @@ int stringLenght(char *string)
   }
   return it;
 }
+
+void printEnryptedMessage(char * encrypted_string)
+{
+  printf("encrypted text: %s\n", encrypted_string);
+}
+
 
 char * reverseString(char *input_string)
 {
