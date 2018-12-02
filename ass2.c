@@ -32,7 +32,11 @@ ReturnValue printError(ReturnValue return_value)
 
 void printEnryptedMessage(const char * encrypted_string)
 {
-  printf("encrypted text: %s\n", encrypted_string);
+  // for(int it = 0; it < '\0'; ++it)
+  // {
+  //   printf("%c",encrypted_string[it]);
+  // }
+  printf("encrypted text: %s", encrypted_string);
 }
 
 int stringLenght(char *string)
@@ -45,47 +49,51 @@ int stringLenght(char *string)
   return it;
 }
 
-<<<<<<< HEAD
-const char * reverseString(char *input_string)
-{
-  //TODO reverse string
-  return input_string
-}
-
-=======
-
-// TODO space should stay as space
->>>>>>> 33d462ba4283736cc1ca8d72debc376fcbc50121
-const char * encryption(char *input_string)
+char * reverseString(char *input_string)
 {
   char ch;
+  int string_length = stringLenght(input_string);
+  for(int it = 0; it < string_length/2; ++it)
+  {
+    ch = input_string[it];
+    input_string[it] = input_string[string_length - it -1];
+    input_string[string_length - it -1] = ch;
+  }
+  return input_string;
+}
+
+const char * encryption(char *input_string)
+{
+  unsigned char ch;
   int string_length = stringLenght(input_string);
   int encryption_key = 256 % string_length;
   //
   if(encryption_key == 0){
-    return reverseString();
+    input_string = reverseString(input_string);
   }
   else
   {
     for(int it = 0; input_string[it] != '\0'; ++it)
     {
-      ch = input_string[it] + encryption_key;
-      //ch > 'z'
-      if(ch > 122)
+      ch = input_string[it];// + encryption_key;
+      if( ch >= 97 && ch <= 122)
       {
-        //ch = ch - z + a -1
-        ch = ch - 122 + 97 -1;
+        ch += encryption_key;
+        if(ch > 122)
+        {
+          ch = ch - 122 + 97 -1;
+        }
+        input_string[it] = ch;
       }
-      input_string[it] = ch;
     }
-    return input_string;
   }
+  return input_string;
 }
+/*
 
-
+*/
 int readInput(char *input)
 {
-  // int retrieve;
   int counter = 0;
   int checked_value;
   char ch;
@@ -94,53 +102,23 @@ int readInput(char *input)
   while(TRUE)
   {
     ch = getchar();
-    if(ch == EOF)
+    if(ch == EOF || ch == '\n')
     {
-<<<<<<< HEAD
-        return RETURNEOF; // break
-=======
-      // print space
-      printf("\n");
+      input[counter] = '\0';
       break;
->>>>>>> 33d462ba4283736cc1ca8d72debc376fcbc50121
     }
     else
     {
-<<<<<<< HEAD
-        return RETURNEOF; // break
-    }
-    //TODO you can stop reading with EOF too...
-    // if there are only low letters
-    // if(ch == '\n' && counter > 0)
-    // {
-    //     // if more than 255 chars
-    //     if(counter > 255)
-    //     {
-    //         return -1;
-    //     }
-    //     checked_value = checkInput(input, counter);
-    //     return checked_value;
-    // }
-    // counter++;
-  }
-  //check input
-  return -1;
-=======
       input[counter] = ch;
-    }
-    // end
-    if(ch == '\n')
-    {
-      break;
     }
     counter++;
   }
   checked_value = checkInput(input, counter);
   return checked_value;
->>>>>>> 33d462ba4283736cc1ca8d72debc376fcbc50121
 }
-
-// check if there are all low letters
+/*
+  check if there are all low letters
+*/
 int checkInput(char read_array[], int counter)
 {
   int loop_counter;
@@ -149,18 +127,19 @@ int checkInput(char read_array[], int counter)
   {
     return RETURN_FALSE_NUMBER;
   }
-
-  for(loop_counter = 0; loop_counter < counter; loop_counter++)
+  else
   {
-      // printf("%c\n", read_array[loop_counter]);
-      // check for letters
-      if(read_array[loop_counter] < 97 || read_array[loop_counter] > 122)
-      {
-          if(read_array[loop_counter] != 32)
-          {
-            return RETURN_FALSE_CHAR;
-          }
-      }
+    for(loop_counter = 0; loop_counter < counter; loop_counter++)
+    {
+        // check for letters
+        if(read_array[loop_counter] < 97 || read_array[loop_counter] > 122)
+        {
+            if(read_array[loop_counter] != 32)
+            {
+              return RETURN_FALSE_CHAR;
+            }
+        }
+    }
   }
   return RETURN_OK;
 }
@@ -182,4 +161,3 @@ int main (void)
     return 0;
   }
 }
-
