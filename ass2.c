@@ -29,13 +29,21 @@ ReturnValue printError(ReturnValue return_value)
   }
   return return_value;
 }
+
+// spce is not added as lenght
 int stringLenght(char *string)
 {
   int it = 0;
+  int inserted_space = 0;
   while(string[it] != '\0')
   {
+    if(string[it] == 32)
+    {
+      inserted_space++;
+    }
     ++it;
   }
+  it = it - inserted_space;
   return it;
 }
 
@@ -146,14 +154,18 @@ int main (void)
   char input[MAX];
 
   ReturnValue return_value = readInput(&input);
-
   if(return_value != EVERYTHING_OK){
     printError(return_value);
   }
-  else
+  else if(stringLenght(input) > 0)
   {
     const char* encrypted_string = encryption(input);
     printEnryptedMessage(encrypted_string);
-    return 0;
+    return RETURN_OK;
+  }
+  else
+  {
+    printEnryptedMessage(input);
+    return RETURN_OK;
   }
 }
