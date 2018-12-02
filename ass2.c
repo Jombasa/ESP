@@ -31,7 +31,8 @@ ReturnValue printError(ReturnValue return_value)
 }
 
 // spce is not added as lenght
-int stringLenght(char *string)
+// return throug parameter hole value of lenght
+int stringLenght(char *string, int *whole_lenght)
 {
   int it = 0;
   int inserted_space = 0;
@@ -43,6 +44,7 @@ int stringLenght(char *string)
     }
     ++it;
   }
+  whole_lenght = it;
   it = it - inserted_space;
   return it;
 }
@@ -53,10 +55,10 @@ void printEnryptedMessage(char * encrypted_string)
 }
 
 
-char * reverseString(char *input_string)
+char * reverseString(char *input_string, int string_length)
 {
   char ch;
-  int string_length = stringLenght(input_string);
+  // int string_length = stringLenght(input_string);
   for(int it = 0; it < string_length/2; ++it)
   {
     ch = input_string[it];
@@ -69,11 +71,11 @@ char * reverseString(char *input_string)
 const char * encryption(char *input_string)
 {
   unsigned char ch;
-  int string_length = stringLenght(input_string);
+  int whole_lenght;
+  int string_length = stringLenght(input_string, &whole_lenght);
   int encryption_key = 256 % string_length;
-  //
   if(encryption_key == 0){
-    input_string = reverseString(input_string);
+    input_string = reverseString(input_string, whole_lenght);
   }
   else
   {
@@ -108,6 +110,10 @@ int readInput(char *input)
     ch = getchar();
     if(ch == EOF || ch == '\n')
     {
+      if(ch == EOF)
+      {
+        printf("\n");
+      }
       input[counter] = '\0';
       break;
     }
@@ -157,7 +163,7 @@ int main (void)
   if(return_value != EVERYTHING_OK){
     printError(return_value);
   }
-  else if(stringLenght(input) > 0)
+  else if(stringLenght(input, 0) > 0)
   {
     const char* encrypted_string = encryption(input);
     printEnryptedMessage(encrypted_string);
