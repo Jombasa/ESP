@@ -20,6 +20,8 @@ ReturnValue printError(ReturnValue return_value)
 {
   switch(return_value)
   {
+    case EVERYTHING_OK:
+      break;
     case INVALID_NUM_OF_CHARS:
       printf("[ERR] too many characters\n");
       break;
@@ -32,7 +34,7 @@ ReturnValue printError(ReturnValue return_value)
 
 // spce is not added as lenght
 // return throug parameter hole value of lenght
-int stringLenght(char *string, int *whole_lenght)
+int stringLength(char *string, int *whole_lenght)
 {
   int it = 0;
   int inserted_space = 0;
@@ -44,7 +46,7 @@ int stringLenght(char *string, int *whole_lenght)
     }
     ++it;
   }
-  whole_lenght = it;
+  *whole_lenght = it;
   it = it - inserted_space;
   return it;
 }
@@ -68,11 +70,11 @@ char * reverseString(char *input_string, int string_length)
   return input_string;
 }
 
-const char * encryption(char *input_string)
+char * encryption(char *input_string)
 {
   unsigned char ch;
   int whole_lenght;
-  int string_length = stringLenght(input_string, &whole_lenght);
+  int string_length = stringLength(input_string, &whole_lenght);
   int encryption_key = 256 % string_length;
   if(encryption_key == 0){
     input_string = reverseString(input_string, whole_lenght);
@@ -98,10 +100,10 @@ const char * encryption(char *input_string)
 /*
 
 */
-int readInput(char *input)
+char* readInput(ReturnValue *return_value)
 {
+  static char input[MAX];
   int counter = 0;
-  int checked_value;
   char ch;
 
   printf("plain text: ");
@@ -123,9 +125,10 @@ int readInput(char *input)
     }
     counter++;
   }
-  checked_value = checkInput(input, counter);
-  return checked_value;
+  *return_value = checkInput(input, counter);
+  return input;
 }
+
 /*
   check if there are all low letters
 */
@@ -157,20 +160,23 @@ int checkInput(char read_array[], int counter)
 
 int main (void)
 {
-  char input[MAX];
-
-  ReturnValue return_value = readInput(&input);
+  char *input;
+  int whole_lenght = 0;
+  ReturnValue return_value;
+  input = readInput(&return_value);
   if(return_value != EVERYTHING_OK){
     printError(return_value);
   }
-  else if(stringLenght(input, 0) > 0)
+  else if(stringLength(input, &whole_lenght) > 0)
   {
-    const char* encrypted_string = encryption(input);
+    char* encrypted_string = encryption(input);
     printEnryptedMessage(encrypted_string);
+    printError(return_value);
     return RETURN_OK;
   }
   else
   {
+    printError(return_value);
     printEnryptedMessage(input);
     return RETURN_OK;
   }
